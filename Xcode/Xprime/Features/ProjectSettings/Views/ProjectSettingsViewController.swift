@@ -172,7 +172,7 @@ final class ProjectSettingsViewController: NSViewController, NSTextFieldDelegate
         calculators.selectItem(withTitle: "Virtual Calculator")
         calculator.image = NSImage(named: "VirtualCalculator")
         
-        UserDefaults.standard.set("macOS", forKey: "platform")
+        UserDefaults.standard.set(false, forKey: "plainFallbackText")
         UserDefaults.standard.set(false, forKey: "compression")
         UserDefaults.standard.set("$(SDK)/include", forKey: "include")
         UserDefaults.standard.set("$(SDK)/lib", forKey: "lib")

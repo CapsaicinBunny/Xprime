@@ -31,7 +31,7 @@ enum ToolchainPaths {
     }
 
     static var bin: URL {
-        developerRoot.appendingPathComponent("usr/bin")
+        URL(fileURLWithPath: "/usr/local/bin")
     }
 
     static var include: URL {

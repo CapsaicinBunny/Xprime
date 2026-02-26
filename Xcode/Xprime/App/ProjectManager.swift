@@ -196,6 +196,14 @@ final class ProjectManager {
         self.projectDirectoryURL = nil
         
         UserDefaults.standard.set("", forKey: "lastOpenedProjectPath")
+        let location = UserDefaults.standard.string(forKey: "localtion") ?? FileManager
+            .default
+            .homeDirectoryForCurrentUser
+            .appendingPathComponent("Xprime")
+            .path
+        FileManager
+            .default
+            .changeCurrentDirectoryPath(location)
         
         delegate?.projectManagerDidClose(self)
     }

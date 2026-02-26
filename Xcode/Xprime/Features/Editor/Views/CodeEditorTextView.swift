@@ -22,10 +22,24 @@
 
 import Cocoa
 
+fileprivate struct Substitution: Codable {
+    let from: String
+    let to: String
+}
+
+fileprivate struct Substitutions: Codable {
+    let replacements: [Substitution]
+
+    enum CodingKeys: String, CodingKey {
+        case replacements = "substitutions"
+    }
+}
+
 final class CodeEditorTextView: NSTextView {
     private(set) var theme: Theme?
     private(set) var grammar: Grammar?
     
+    private var substitutions: Substitutions!
     
     private var _smartSubtitution: Bool = false
     var smartSubtitution: Bool {
@@ -104,6 +118,8 @@ final class CodeEditorTextView: NSTextView {
         typingAttributes[.ligature] = 0
         isRichText = false
         usesFindPanel = true
+        
+        loadSubtitutions(at: Bundle.main.url(forResource: "subtitutions", withExtension: "json", subdirectory: "")!)
     }
     
     
@@ -226,7 +242,7 @@ final class CodeEditorTextView: NSTextView {
                      undoManager: undoManager,
                      actionName: actionName)
         if _smartSubtitution {
-            replaceLastTypedOperator()
+            replaceLastTyped()
         }
     }
     
@@ -254,41 +270,25 @@ final class CodeEditorTextView: NSTextView {
         insertText(indent, replacementRange: selectedRange)
     }
     
-    private func replaceLastTypedOperator() {
+    private func replaceLastTyped() {
         guard let textStorage = textStorage else { return }
-        
-        let replacements: [(String, String)] = [
-            ("!=", "≠"),
-            ("<>", "≠"),
-            (">=", "≥"),
-            ("<=", "≤"),
-            ("=>", "▶")
-        ]
         
         let cursorLocation = selectedRange().location
         guard cursorLocation >= 2 else { return } // Need at least 2 chars to match most patterns
         
         let originalText = string as NSString
         
-        // Check the last 2–3 characters before the cursor
-        let maxLookback = 3
+        let maxLookback = 10
         let start = max(cursorLocation - maxLookback, 0)
         let range = NSRange(location: start, length: cursorLocation - start)
         let recentText = originalText.substring(with: range)
         
         textStorage.beginEditing()
         
-        for (find, replace) in replacements {
-            if recentText.hasSuffix(find) {
-                let replaceRange = NSRange(location: cursorLocation - find.count, length: find.count)
-                textStorage.replaceCharacters(in: replaceRange, with: replace)
-                
-                // Move cursor after replacement
-                let newCursor = replaceRange.location + replace.count
-                if newCursor >= textStorage.length {
-                    break
-                }
-                setSelectedRange(NSRange(location: newCursor, length: 0))
+        for substitution in substitutions.replacements {
+            if recentText.hasSuffix(substitution.from) {
+                let replaceRange = NSRange(location: cursorLocation - substitution.from.count, length: substitution.from.count)
+                textStorage.replaceCharacters(in: replaceRange, with: substitution.to)
                 break
             }
         }
@@ -303,6 +303,19 @@ final class CodeEditorTextView: NSTextView {
             return jsonString
         } catch {
             return nil
+        }
+    }
+    
+    func loadSubtitutions(at url: URL) {
+        if let jsonString = loadJSONString(url),
+           let jsonData = jsonString.data(using: .utf8) {
+            do {
+                substitutions = try JSONDecoder().decode(Substitutions.self, from: jsonData)
+            } catch {
+                return
+            }
+        } else {
+            return
         }
     }
     

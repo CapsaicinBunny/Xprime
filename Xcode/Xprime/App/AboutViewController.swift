@@ -62,7 +62,7 @@ final class AboutViewController: NSViewController {
             let bundleShortVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "26.0"
             let bundleVersion = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "0"
             Version.stringValue = "Version \(bundleShortVersion).\(bundleVersion)"
-            Tools.isHidden = false
+//            Tools.isHidden = false
             return
         }
         self.view.window?.close()
@@ -71,7 +71,6 @@ final class AboutViewController: NSViewController {
     override func mouseUp(with event: NSEvent) {
         let bundleShortVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "26.0"
         Version.stringValue = "Version \(bundleShortVersion)"
-        Tools.isHidden = true
     }
     
     private func toolsInfo() {
@@ -80,7 +79,8 @@ final class AboutViewController: NSViewController {
         let font = version(forTool: "font");
         let note = version(forTool: "note");
         
-        Tools.stringValue = "PPL+ \(`ppl+`) - GROB+ \(grob) - FONT \(font) - NOTE \(note)"
+        Tools.stringValue = "PPL+ \(`ppl+`) - GROB \(grob) - FONT \(font) - NOTE \(note)"
+        Tools.isHidden = false
     }
     
     private func version(forTool tool: String) -> String {
@@ -90,7 +90,7 @@ final class AboutViewController: NSViewController {
             arguments: ["--version"]
         )
         
-        var text = version.out ?? ""
+        var text = version.out ?? "MISSING!"
         
         if text.hasSuffix("\n") {
             text.removeLast()

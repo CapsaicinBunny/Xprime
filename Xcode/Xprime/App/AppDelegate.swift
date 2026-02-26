@@ -38,6 +38,18 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSToolbarItemValidation, NSM
         UserDefaults.standard.synchronize()
         
         NSApp.helpMenu = nil
+        
+        let url = FileManager
+            .default
+            .homeDirectoryForCurrentUser
+            .appendingPathComponent("Xprime")
+        
+        if !url.hasDirectoryPath {
+            try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+            try? FileManager.default.createDirectory(at: url.appendingPathComponent("Projects"), withIntermediateDirectories: true)
+            FileManager.default.changeCurrentDirectoryPath(url.appendingPathComponent("Projects").path)
+            UserDefaults.standard.set(url.path, forKey: "localtion")
+        }
     }
     
     func applicationWillTerminate(_ aNotification: Notification) {

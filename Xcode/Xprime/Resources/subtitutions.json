@@ -1,0 +1,12 @@
+{
+  "substitutions": [
+    { "from": "!=", "to": "≠" },
+    { "from": "<>", "to": "≠" },
+    { "from": ">=", "to": "≥" },
+    { "from": "<=", "to": "≤" },
+    { "from": "=>", "to": "▶" },
+    { "from": "{{", "to": "BEGIN" },
+    { "from": "}}", "to": "END" },
+    { "from": "??", "to": "IF" }
+  ]
+}

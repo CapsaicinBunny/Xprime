@@ -63,6 +63,7 @@ final class LineNumberGutterView: NSRulerView {
 
     override func drawHashMarksAndLabels(in rect: NSRect) {
         let backgroundColor = gutterNumberAttributes[.backgroundColor] ?? .windowBackgroundColor
+        
         backgroundColor.setFill()
         let fillRect = NSRect(x: 0, y: 0, width: self.ruleThickness, height: rect.size.height)
         fillRect.fill()

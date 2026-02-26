@@ -68,7 +68,14 @@ final class DocumentManager {
     private func saveNote(url: URL) {
         saveDocument(to: url.appendingPathExtension("ntf"))
         let path = ToolchainPaths.bin.appendingPathComponent("note")
-        let result = ProcessRunner.run(executable: path, arguments: [url.appendingPathExtension("ntf").path, "-o", url.path])
+        
+        let fallback = UserDefaults.standard.object(forKey: "plainFallbackText") as? Bool ?? false
+        var arguments: [String] = [url.appendingPathExtension("ntf").path, "-o", url.path]
+        if fallback {
+            arguments.append("--plain-fallback")
+        }
+        
+        let result = ProcessRunner.run(executable: path, arguments: arguments)
         
         guard result.exitCode == 0 else {
             let error = NSError(

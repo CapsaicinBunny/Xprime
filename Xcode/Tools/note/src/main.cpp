@@ -171,49 +171,53 @@ int main(int argc, const char * argv[]) {
     for( int n = 1; n < argc; n++ ) {
         std::string args = argv[n];
         
-        if (args == "-o" || args == "--outfile") {
-            if ( ++n >= argc ) {
-                error();
+        if (argv[n][0] == '-') {
+            if (args == "-o" || args == "--outfile") {
+                if ( ++n >= argc ) {
+                    error();
+                    exit(0);
+                }
+                outpath = resolveOutputFile(argv[n]);
+                continue;
+            }
+            
+            if ( args == "--plain-fallback" ) {
+                cc = true;
+                continue;
+            }
+            
+            if (args == "-t" || args == "--type") {
+                if ( ++n >= argc ) {
+                    error();
+                    exit(0);
+                }
+                args = argv[n];
+                if (args == "ntf")
+                    type = Type::NTF;
+                continue;
+            }
+            
+            if (args == "--help") {
+                help();
                 exit(0);
             }
-            outpath = resolveOutputFile(argv[n]);
-            continue;
-        }
-        
-        if ( args == "--cc" ) {
-            cc = true;
-            continue;
-        }
-        
-        if (args == "-t" || args == "--type") {
-            if ( ++n >= argc ) {
-                error();
-                exit(0);
+            
+            if (args == "--version") {
+                std::cout << VERSION_NUMBER << "." << BUNDLE_VERSION << "\n";
+                return 0;
             }
-            args = argv[n];
-            if (args == "ntf")
-                type = Type::NTF;
-            continue;
-        }
-        
-        if (args == "--help") {
-            help();
-            exit(0);
-        }
-        
-        if (args == "--version") {
-            std::cout << VERSION_NUMBER << "." << BUNDLE_VERSION << "\n";
+            
+            if (args == "--build") {
+                std::cout << NUMERIC_BUILD << "\n";
+                return 0;
+            }
+            
+            if (args == "-v" || args == "--verbose") {
+                verbose = true;
+                continue;
+            }
+            error();
             return 0;
-        }
-        
-        if (args == "--build") {
-            std::cout << NUMERIC_BUILD << "\n";
-            return 0;
-        }
-        
-        if (args == "-v" || args == "--verbose") {
-            verbose = true;
-            continue;
         }
         
         inpath = resolveAndValidateInputFile(argv[n]);

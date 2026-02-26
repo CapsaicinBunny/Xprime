@@ -55,7 +55,7 @@ final class ThemeManager {
         // Status & buttons
         let bgColor = NSColor(hex: theme.window?["background"] ?? "") ?? .windowBackgroundColor
         window?.backgroundColor = bgColor
-        statusLabel?.textColor = bgColor.contrastColor()
-        outputButtons.forEach { $0.contentTintColor = bgColor.contrastColor() }
+//        statusLabel?.textColor = bgColor.contrastColor()
+//        outputButtons.forEach { $0.contentTintColor = bgColor.contrastColor() }
     }
 }

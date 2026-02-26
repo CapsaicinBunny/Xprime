@@ -615,68 +615,28 @@ enum HPServices {
         guard isProcessRunning("HP Prime Virtual Calculator") else {
             return
         }
-        killProcess(named: "HP Prime Virtual Calculator")
         
-        let platform = UserDefaults.standard.object(forKey: "platform") as? String ?? "macOS"
-        
-        if platform == "macOS" {
-            if let targetBundleIdentifier = getBundleIdentifier(forApp: "HP Prime") {
-                terminateApp(withBundleIdentifier: targetBundleIdentifier)
-            }
+        if let targetBundleIdentifier = getBundleIdentifier(forApp: "HP Prime") {
+            terminateApp(withBundleIdentifier: targetBundleIdentifier)
         }
     }
     
     static func launchVirtualCalculator() {
-        let platform = UserDefaults.standard.object(forKey: "platform") as? String ?? "macOS"
-        if platform == "macOS" {
-            if let targetBundleIdentifier = getBundleIdentifier(forApp: "HP Prime") {
-                terminateApp(withBundleIdentifier: targetBundleIdentifier)
-            }
-            
-            launchApplication(named: "HP Prime.app")
-            return
+        if let targetBundleIdentifier = getBundleIdentifier(forApp: "HP Prime") {
+            terminateApp(withBundleIdentifier: targetBundleIdentifier)
         }
         
-        if isProcessRunning("HP Prime Virtual Calculator") {
-            killProcess(named: "HP Prime Virtual Calculator")
-        }
-        
-        launchApplication(
-            named: "/Applications/Wine.app/Contents/MacOS/wine",
-            arguments: [
-                FileManager
-                    .default
-                    .homeDirectoryForCurrentUser
-                    .appendingPathComponent(".wine/drive_c/Program Files/HP/HP Prime Virtual Calculator/HPPrime.exe")
-                    .path
-            ])
+        launchApplication(named: "HP Prime.app")
     }
     
     static func launchConnectivityKit() {
         let appName = "HP Connectivity Kit"
         
-        let platform = UserDefaults.standard.object(forKey: "platform") as? String ?? "macOS"
-        if platform == "macOS" {
-            if let targetBundleIdentifier = getBundleIdentifier(forApp: appName) {
-                terminateApp(withBundleIdentifier: targetBundleIdentifier)
-            }
-            
-            launchApplication(named: appName + ".app")
-            return
+        
+        if let targetBundleIdentifier = getBundleIdentifier(forApp: appName) {
+            terminateApp(withBundleIdentifier: targetBundleIdentifier)
         }
         
-        if isProcessRunning("HP Connectivity Kit") {
-            killProcess(named: "HP Connectivity Kit")
-        }
-        
-        launchApplication(
-            named: "/Applications/Wine.app/Contents/MacOS/wine",
-            arguments: [
-                FileManager
-                    .default
-                    .homeDirectoryForCurrentUser
-                    .appendingPathComponent(".wine/drive_c/Program Files/HP/HP Connectivity Kit/ConnectivityKit.exe")
-                    .path
-            ])
+        launchApplication(named: appName + ".app")
     }
 }

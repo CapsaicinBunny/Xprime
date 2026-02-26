@@ -23,10 +23,9 @@
 import Cocoa
 
 final class AdvanceViewController: NSViewController, NSTextFieldDelegate, NSComboBoxDelegate {
-    @IBOutlet weak var preferProjectBuildSwitch: NSSwitch!
-    @IBOutlet weak var macOS: NSButton!
-    @IBOutlet weak var Wine: NSButton!
-    @IBOutlet weak var compressionSwitch: NSSwitch!
+    @IBOutlet weak var preferProjectBuild: NSSwitch!
+    @IBOutlet weak var fallback: NSSwitch!
+    @IBOutlet weak var compression: NSSwitch!
     
     private var projectManager: ProjectManager?
     
@@ -39,9 +38,8 @@ final class AdvanceViewController: NSViewController, NSTextFieldDelegate, NSComb
         configureArchiveSourceSelection()
         configureArchiveSourceActions()
         
-        configurePlatformAvailability()
-        configurePlatformSelection()
-        configurePlatformActions()
+        configureFallbackSelection()
+        configureFallbackActions()
         
         configureCompressionSelection()
         configureCompressionActions()
@@ -52,12 +50,8 @@ final class AdvanceViewController: NSViewController, NSTextFieldDelegate, NSComb
         UserDefaults.standard.set(sender.state == .on, forKey: "archiveProjectAppOnly")
     }
     
-    @objc private func platform(_ sender: NSButton) {
-        if sender.title == "macOS" {
-            UserDefaults.standard.set(sender.state == .on ? "macOS" : "Wine", forKey: "platform")
-        } else {
-            UserDefaults.standard.set(sender.state == .on ? "Wine" : "macOS", forKey: "platform")
-        }
+    @objc private func fallbackSwitchToggled(_ sender: NSSwitch) {
+        UserDefaults.standard.set(sender.state == .on, forKey: "plainFallbackText")
     }
     
     @objc private func compressionSwitchToggled(_ sender: NSSwitch) {
@@ -72,48 +66,31 @@ final class AdvanceViewController: NSViewController, NSTextFieldDelegate, NSComb
     private func configureArchiveSourceSelection() {
         let archiveProjectAppOnly = UserDefaults.standard.object(forKey: "archiveProjectAppOnly") as? Bool ?? true
         
-        self.preferProjectBuildSwitch.state = archiveProjectAppOnly ? .on : .off
+        self.preferProjectBuild.state = archiveProjectAppOnly ? .on : .off
     }
     
     private func configureArchiveSourceActions() {
-        preferProjectBuildSwitch.target = self
-        preferProjectBuildSwitch.action = #selector(preferProjectBuildSwitchToggled)
+        preferProjectBuild.target = self
+        preferProjectBuild.action = #selector(preferProjectBuildSwitchToggled)
     }
     
-    private func configurePlatformAvailability() {
-        if !FileManager.default.fileExists(atPath: "/Applications/Wine.app/Contents/MacOS/wine") {
-            macOS.isEnabled = false
-            Wine.isEnabled = false
-            UserDefaults.standard.set("macOS", forKey: "platform")
-        }
+    private func configureFallbackSelection() {
+        let fallback = UserDefaults.standard.object(forKey: "plainFallbackText") as? Bool ?? false
+        self.fallback.state = fallback ? .on : .off
     }
     
-    private func configurePlatformSelection() {
-        let platform = UserDefaults.standard.object(forKey: "platform") as? String ?? "macOS"
-
-        if platform == "macOS" {
-            macOS.state = .on
-            Wine.state = .off
-        } else {
-            macOS.state = .off
-            Wine.state = .on
-        }
-    }
-    
-    private func configurePlatformActions() {
-        macOS.target = self
-        macOS.action = #selector(platform(_:))
-        Wine.target = self
-        Wine.action = #selector(platform(_:))
+    private func configureFallbackActions() {
+        fallback.target = self
+        fallback.action = #selector(fallbackSwitchToggled(_:))
     }
     
     private func configureCompressionSelection() {
         let compression = UserDefaults.standard.object(forKey: "compression") as? Bool ?? false
-        compressionSwitch.state = compression ? .on : .off
+        self.compression.state = compression ? .on : .off
     }
     
     private func configureCompressionActions() {
-        compressionSwitch.target = self
-        compressionSwitch.action = #selector(compressionSwitchToggled)
+        compression.target = self
+        compression.action = #selector(compressionSwitchToggled)
     }
 }

@@ -72,8 +72,6 @@ final class MainViewController: NSViewController, NSTextViewDelegate, NSToolbarI
         setupEditor()
         
         if let menu = NSApp.mainMenu {
-            populateThemesMenu(menu: menu)
-            populateGrammarMenu(menu: menu)
             populateOpenRecentMenu(menu: menu)
             populateTemplateMenu(menu: menu)
         }
@@ -91,7 +89,7 @@ final class MainViewController: NSViewController, NSTextViewDelegate, NSToolbarI
                                     outputButtons: [outputButton, clearOutputButton],
                                     window: view.window)
         updateManager = UpdateManager(presenterWindow: view.window)
-        setupWindowAppearance()
+
         themeManager.applySavedTheme()
         registerWindowFocusObservers()
         refreshBaseApplicationMenu()
@@ -131,14 +129,6 @@ final class MainViewController: NSViewController, NSTextViewDelegate, NSToolbarI
         )
     }
     
-    private func setupWindowAppearance() {
-        guard let window = view.window else { return }
-        window.isOpaque = false
-        window.titlebarAppearsTransparent = true
-        window.styleMask = [.resizable, .titled, .miniaturizable]
-        window.hasShadow = true
-    }
-    
     // MARK: - Observers
 
     
@@ -173,6 +163,9 @@ final class MainViewController: NSViewController, NSTextViewDelegate, NSToolbarI
         print("Window gained focus")
 #endif
         
+        themeManager.applySavedTheme()
+        codeEditorTextView.smartSubtitution = UserDefaults.standard.bool(forKey: "SubtitutionEnabled")
+        
         guard let projectDirectoryURL = projectManager.projectDirectoryURL else { return }
         
         let currentDirectoryPath = FileManager.default.currentDirectoryPath
@@ -194,66 +187,7 @@ final class MainViewController: NSViewController, NSTextViewDelegate, NSToolbarI
         print("Window lost focus")
 #endif
     }
-    
-    // MARK: -
-    
-    private func populateThemesMenu(menu: NSMenu) {
-        guard let resourceURLs = Bundle.main.urls(
-            forResourcesWithExtension: "xpcolortheme",
-            subdirectory: "Themes"
-        ) else {
-#if Debug
-            print("⚠️ No .xpcolortheme files found.")
-#endif
-            return
-        }
-        
-        let sortedURLs = resourceURLs
-            .filter { !$0.lastPathComponent.hasPrefix(".") }
-            .sorted {
-                $0.deletingPathExtension().lastPathComponent
-                    .localizedCaseInsensitiveCompare(
-                        $1.deletingPathExtension().lastPathComponent
-                    ) == .orderedAscending
-            }
-        
-        for fileURL in sortedURLs {
-            let name = fileURL.deletingPathExtension().lastPathComponent
-            
-            let menuItem = NSMenuItem(
-                title: name,
-                action: #selector(handleThemeSelection(_:)),
-                keyEquivalent: ""
-            )
-            menuItem.representedObject = fileURL
-            menuItem.target = self
-            
-            menu.item(withTitle: "Editor")?
-                .submenu?
-                .item(withTitle: "Theme")?
-                .submenu?
-                .addItem(menuItem)
-        }
-    }
 
-    private func populateGrammarMenu(menu: NSMenu) {
-        guard let resourceURLs = Bundle.main.urls(forResourcesWithExtension: "xpgrammar", subdirectory: "Grammars") else {
-#if Debug
-            print("⚠️ No .xpgrammar files found.")
-#endif
-            return
-        }
-        
-        for fileURL in resourceURLs {
-            let name = fileURL.deletingPathExtension().lastPathComponent
-            if name.first == "." { continue }
-            
-            let menuItem = NSMenuItem(title: name, action: #selector(handleGrammarSelection(_:)), keyEquivalent: "")
-            menuItem.representedObject = fileURL
-            menuItem.target = self  // or another target if needed
-            menu.item(withTitle: "Editor")?.submenu?.item(withTitle: "Grammar")?.submenu?.addItem(menuItem)
-        }
-    }
     
     // MARK: - Templates
     private func populateTemplateMenu(menu: NSMenu) {
@@ -318,14 +252,11 @@ final class MainViewController: NSViewController, NSTextViewDelegate, NSToolbarI
             return ""
         }
         
-        guard let menuItem = sender as? NSMenuItem else { return }
         let url = Bundle.main.bundleURL
             .appendingPathComponent(templatesBasePath)
-            .appendingPathComponent(traceMenuItem(menuItem))
-            .appendingPathComponent(menuItem.title)
+            .appendingPathComponent(traceMenuItem(sender))
+            .appendingPathComponent(sender.title)
             .appendingPathExtension("prgm")
-        
-        
         
         if let contents = HPServices.loadHPPrgm(at: url) {
             codeEditorTextView.insertCode(contents)
@@ -501,10 +432,10 @@ final class MainViewController: NSViewController, NSTextViewDelegate, NSToolbarI
     }
     
     // MARK: - Theme & Grammar Action Handlers
-    @objc func handleThemeSelection(_ sender: NSMenuItem) {
-        UserDefaults.standard.set(sender.title, forKey: "preferredTheme")
-        themeManager.applySavedTheme()
-    }
+//    @objc func handleThemeSelection(_ sender: NSMenuItem) {
+//        UserDefaults.standard.set(sender.title, forKey: "preferredTheme")
+//        themeManager.applySavedTheme()
+//    }
     
     @objc func handleGrammarSelection(_ sender: NSMenuItem) {
         UserDefaults.standard.set(sender.title, forKey: "preferredGrammar")
@@ -883,9 +814,6 @@ final class MainViewController: NSViewController, NSTextViewDelegate, NSToolbarI
             options: [.skipsHiddenFiles]
         )
         
-        let apps = NSImage(named: "Apps")?.copy() as! NSImage
-        let program = NSImage(named: "Program")?.copy() as! NSImage
-//        let file = NSImage(named: "File")?.copy() as! NSImage
         let python = NSImage(named: "Python")?.copy() as! NSImage
         let notes = NSImage(named: "Notes")?.copy() as! NSImage
         let icon = NSImage(named: "Icon")?.copy() as! NSImage
@@ -1188,11 +1116,14 @@ final class MainViewController: NSViewController, NSTextViewDelegate, NSToolbarI
         to destinationURL: URL
     ) {
         let command = ToolchainPaths.bin.appendingPathComponent("note").path
-        let arguments: [String] = [
+        var arguments: [String] = [
             sourceURL.path,
             "-o",
             destinationURL.path
         ]
+        if UserDefaults.standard.object(forKey: "plainFallbackText") as? Bool ?? false == true {
+            arguments.append("--plain-fallback")
+        }
         
         let commandURL = URL(fileURLWithPath: command)
         let result = ProcessRunner.run(executable: commandURL, arguments: arguments)
@@ -1372,12 +1303,7 @@ final class MainViewController: NSViewController, NSTextViewDelegate, NSToolbarI
         }
         self.outputTextView.appendTextAndScroll(contents.err ?? "")
     }
-    
-    // MARK: - Editor
-    @IBAction func toggleSmartSubtitution(_ sender: NSMenuItem) {
-        codeEditorTextView.smartSubtitution = !codeEditorTextView.smartSubtitution
-        sender.state = codeEditorTextView.smartSubtitution ? .on : .off
-    }
+
     
     // MARK: - Output Information
     @IBAction func toggleOutput(_ sender: NSButton) {
@@ -1473,13 +1399,13 @@ final class MainViewController: NSViewController, NSTextViewDelegate, NSToolbarI
             }
             return false
             
-        case #selector(handleThemeSelection(_:)):
-            if ThemeLoader.shared.preferredTheme == menuItem.title {
-                menuItem.state = .on
-            } else {
-                menuItem.state = .off
-            }
-            return true
+//        case #selector(handleThemeSelection(_:)):
+//            if ThemeLoader.shared.preferredTheme == menuItem.title {
+//                menuItem.state = .on
+//            } else {
+//                menuItem.state = .off
+//            }
+//            return true
             
         case #selector(handleGrammarSelection(_:)):
             if GrammarLoader.shared.preferredGrammar == menuItem.title {

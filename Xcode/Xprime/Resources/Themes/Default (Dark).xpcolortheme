@@ -10,7 +10,7 @@
     },
     "lineNumberRuler": {
         "foreground": "#888888",
-        "background": "#111111"
+        "background": "#11111100"
     },
     "window": {
         "background": "#1F1F24"
