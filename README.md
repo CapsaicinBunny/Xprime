@@ -27,7 +27,6 @@ Hold down the **Option (⌥) key**, then **click and hold** on the About window 
 |:-|:-|:-|
 |.ppl|HP Prime Programming Language source file|UTF8|
 |.prgm|HP Prime program source code|UTF16le|
-|.app|HP Prime application source code (PPL)|UTF16le|
 |.note|HP Prime note plain fallback text|UTF16le|
 |.note|NoteText format|UTF8|
 |.ntf|NoteText format|UTF8|
