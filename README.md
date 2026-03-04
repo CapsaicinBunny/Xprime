@@ -10,7 +10,7 @@ Download links: <a href="http://insoft.uk/action/?method=downlink&path=macos&fil
 **Requires** macOS 14.6 or later
 
 ### Xprime 26
-Read [Whats New](https://github.com/Insoft-UK/Xprime/blob/dev/UPDATE.md)
+Read [Whats New](UPDATE.md)
 
 ### Hidden Version Detail
 In Xprime, you can reveal the full version number from the About window.
