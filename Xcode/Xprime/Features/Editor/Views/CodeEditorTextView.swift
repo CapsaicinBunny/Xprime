@@ -233,6 +233,7 @@ final class CodeEditorTextView: NSTextView {
         applySyntaxHighlighting()
     }
     
+
     // MARK: - Private/s
     
     private func registerUndo(actionName: String = "Text Changed") {

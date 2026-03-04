@@ -61,6 +61,7 @@ final class DocumentManager {
     
     private func openUntitled() {
         editor.string = ""
+        editor.undoManager?.removeAllActions()
         currentDocumentURL = nil
         documentIsModified = false
     }
@@ -102,6 +103,7 @@ final class DocumentManager {
             self.outputTextView.appendTextAndScroll("Importing Adafruit GFX Font...\n")
             
             editor.string = out
+            editor.undoManager?.removeAllActions()
             currentDocumentURL = nil
             documentIsModified = false
             delegate?.documentManagerDidOpen(self)
@@ -121,6 +123,7 @@ final class DocumentManager {
             self.outputTextView.appendTextAndScroll("Importing \"\(url.pathExtension.uppercased())\" Image...\n")
             
             editor.string = out
+            editor.undoManager?.removeAllActions()
             currentDocumentURL = nil
             documentIsModified = false
             delegate?.documentManagerDidOpen(self)
@@ -145,6 +148,7 @@ final class DocumentManager {
         
         outputTextView.appendTextAndScroll(result.err ?? "")
         editor.string = out
+        editor.undoManager?.removeAllActions()
         currentDocumentURL = url
         documentIsModified = false
         delegate?.documentManagerDidOpen(self)
@@ -190,6 +194,7 @@ final class DocumentManager {
         
         outputTextView.appendTextAndScroll(result.err ?? "")
         editor.string = out
+        editor.undoManager?.removeAllActions()
         currentDocumentURL = url
         documentIsModified = false
         delegate?.documentManagerDidOpen(self)
@@ -224,6 +229,7 @@ final class DocumentManager {
         do {
             let content = try String(contentsOf: url, encoding: encoding)
             editor.string = content
+            editor.undoManager?.removeAllActions()
             currentDocumentURL = url
             documentIsModified = false
             UserDefaults.standard.set(url.path, forKey: "lastOpenedFilePath")

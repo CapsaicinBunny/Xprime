@@ -1157,14 +1157,14 @@ final class MainViewController: NSViewController, NSTextViewDelegate, NSToolbarI
        
         if projectManager.isProjectApplication {
             buildApplication()
-            installHPAppDirectoryToCalculator(sender)
+            installHPAppDirectoryToCalculator()
         } else {
             buildProgram()
-            installHPPrgmFileToCalculator(sender)
+            installHPPrgmFileToCalculator()
         }
     }
     
-    @IBAction func installHPPrgmFileToCalculator(_ sender: Any) {
+    private func installHPPrgmFileToCalculator() {
         guard let currentDirectoryURL = projectManager.projectDirectoryURL else { return }
         guard let projectName = projectManager.projectName else { return }
         
@@ -1175,7 +1175,12 @@ final class MainViewController: NSViewController, NSTextViewDelegate, NSToolbarI
         do {
             let calculator = UserDefaults.standard.object(forKey: "calculator") as? String ?? "Prime"
             try HPServices.installHPPrgm(at: programURL, forUser: calculator)
-            outputTextView.appendTextAndScroll("✅ Successfully installed \"\(programURL.lastPathComponent)\" \n")
+            
+            if let projectName = projectManager.projectName, HPServices.hpPrgmIsInstalled(named: projectName) {
+                outputTextView.appendTextAndScroll("✅ Successfully re-installed \"\(programURL.lastPathComponent)\" \n")
+            } else {
+                outputTextView.appendTextAndScroll("✅ Successfully installed \"\(programURL.lastPathComponent)\" \n")
+            }
         } catch {
             AlertPresenter.showInfo(
                 on: self.view.window,
@@ -1186,7 +1191,7 @@ final class MainViewController: NSViewController, NSTextViewDelegate, NSToolbarI
         }
     }
     
-    @IBAction func installHPAppDirectoryToCalculator(_ sender: Any) {
+    private func installHPAppDirectoryToCalculator() {
         guard let currentDirectoryURL = projectManager.projectDirectoryURL else { return }
         guard let projectName = projectManager.projectName else { return }
         
@@ -1197,7 +1202,12 @@ final class MainViewController: NSViewController, NSTextViewDelegate, NSToolbarI
         do {
             let calculator = UserDefaults.standard.object(forKey: "calculator") as? String ?? "Prime"
             try HPServices.installHPAppDirectory(at: appDirURL, forUser: calculator)
-            outputTextView.appendTextAndScroll("✅ Successfully installed \"\(appDirURL.lastPathComponent)\" \n")
+            
+            if let projectName = projectManager.projectName, HPServices.hpAppDirectoryIsInstalled(named: projectName) {
+                outputTextView.appendTextAndScroll("✅ Successfully re-installed \"\(appDirURL.lastPathComponent)\" \n")
+            } else {
+                outputTextView.appendTextAndScroll("✅ Successfully installed \"\(appDirURL.lastPathComponent)\" \n")
+            }
         } catch {
             AlertPresenter.showInfo(
                 on: self.view.window,
@@ -1305,6 +1315,7 @@ final class MainViewController: NSViewController, NSTextViewDelegate, NSToolbarI
             }
             return false
             
+       
         default :
             break
         }
@@ -1326,26 +1337,7 @@ final class MainViewController: NSViewController, NSTextViewDelegate, NSToolbarI
                 return true
             }
             return false
-            
-        case #selector(installHPPrgmFileToCalculator(_:)):
-            menuItem.title = "Install Program"
-            if let projectName = projectManager.projectName, HPServices.hpPrgmIsInstalled(named: projectName) {
-                    menuItem.title = "Update Program"
-            }
-            if let currentDirectoryURL = projectManager.projectDirectoryURL, let projectName = projectManager.projectName  {
-                return HPServices.hpPrgmExists(atPath: currentDirectoryURL.path, named: projectName)
-            }
-            return false
-            
-        case #selector(installHPAppDirectoryToCalculator(_:)):
-            menuItem.title = "Install Application"
-            if let projectName = projectManager.projectName, HPServices.hpAppDirectoryIsInstalled(named: projectName) {
-                menuItem.title = "Update Application"
-            }
-            if let projectName = projectManager.projectName, let currentDirectoryURL = projectManager.projectDirectoryURL {
-                return HPServices.hpAppDirIsComplete(atPath: currentDirectoryURL.path, named: projectName)
-            }
-            return false
+        
             
         case #selector(run(_:)), #selector(archive(_:)), #selector(build(_:)), #selector(buildForRunning(_:)):
             if projectManager.projectDirectoryURL != nil   {
