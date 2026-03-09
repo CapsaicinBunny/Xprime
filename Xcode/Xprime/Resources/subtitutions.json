@@ -13,12 +13,17 @@
     { "from": "}}", "to": "END;\n" },
     { "from": "??", "to": "IF" },
     { "from": "?:", "to": "THEN" },
+    { "from": "?!", "to": "ELSE" },
     { "from": "..", "to": "WHILE" },
     { "from": "><", "to": "WHILE 1 DO\n" },
     { "from": ">>", "to": "REPEAT\n" },
     { "from": "<<", "to": "UNTIL" },
     { "from": "::", "to": "CASE\n" },
-    { "from": ":-", "to": "DEFAULT\n" },
-    { "from": "//", "to": "// " }
+    { "from": "*:", "to": "DEFAULT\n" },
+    { "from": "**", "to": "EXPR" },
+    { "from": "\\&", "to": "BITAND" },
+    { "from": "\\|", "to": "BITOR" },
+    { "from": "\\^", "to": "BITXOR" },
+    { "from": "\\~", "to": "BITNOT" }
   ]
 }

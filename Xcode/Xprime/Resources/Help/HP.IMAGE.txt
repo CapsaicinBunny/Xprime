@@ -5,4 +5,4 @@ HP.IMAGE(trgtG, img)
 
 Draws the image img into the region of trgtG at dx, dy and scaled to scaleX, scaleY
 
-Note: HP.IMAGE requires the GROB library.
+Note: HP.IMAGE requires the HP library.

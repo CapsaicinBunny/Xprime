@@ -23,7 +23,33 @@
 import Cocoa
 
 
-final class ProjectSettingsViewController: NSViewController, NSTextFieldDelegate {
+final class ProjectSettingsViewController: NSViewController, NSTextFieldDelegate, ProjectManagerDelegate {
+    func projectManagerDidSave(_ manager: ProjectManager) {
+    }
+    
+    func projectManager(_ manager: ProjectManager, didFailWith error: any Error) {
+    }
+    
+    func projectManagerDidOpen(_ manager: ProjectManager) {
+        librarySearchPath.stringValue = ToolchainPaths.lib
+        headerSearchPath.stringValue = ToolchainPaths.include
+        
+        let calculator = UserDefaults.standard.object(forKey: "calculator") as? String ?? "Prime"
+
+        if HPServices.hpPrimeCalculatorExists(named: calculator) {
+            self.calculator.image = NSImage(named: "ConnectivityKit")
+        } else {
+            self.calculator.image = NSImage(named: "VirtualCalculator")
+        }
+        
+        populateCalculatorsMenu()
+    }
+    
+    func projectManager(_ manager: ProjectManager, didFailToOpen error: any Error) {
+    }
+    
+    func projectManagerDidClose(_ manager: ProjectManager) {
+    }
     
     
     @IBOutlet weak var librarySearchPath: NSTextField!
@@ -34,30 +60,20 @@ final class ProjectSettingsViewController: NSViewController, NSTextFieldDelegate
     
     @IBOutlet weak var calculators: NSPopUpButton!
     
+    // MARK: - Managers
+    private var projectManager: ProjectManager!
+    
     // MARK: - View
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        librarySearchPath.delegate = self
-        headerSearchPath.delegate = self
-        
-        let include = UserDefaults.standard.object(forKey: "include") as? String ?? "$(SDKROOT)/include"
-        let lib = UserDefaults.standard.object(forKey: "lib") as? String ?? "$(SDKROOT)/lib"
-        let calculator = UserDefaults.standard.object(forKey: "calculator") as? String ?? "Prime"
+        projectManager = ProjectManager()
+        projectManager.delegate = self
 
         
-        librarySearchPath.stringValue = lib
-        headerSearchPath.stringValue = include
-        
-        
-        if HPServices.hpPrimeCalculatorExists(named: calculator) {
-            self.calculator.image = NSImage(named: "ConnectivityKit")
-        } else {
-            self.calculator.image = NSImage(named: "VirtualCalculator")
-        }
-        
-        populateCalculatorsMenu()
+        librarySearchPath.delegate = self
+        headerSearchPath.delegate = self
     }
     
     override func viewDidAppear() {
@@ -74,6 +90,10 @@ final class ProjectSettingsViewController: NSViewController, NSTextFieldDelegate
         window.titlebarAppearsTransparent = true
         window.styleMask = [.nonactivatingPanel, .titled]
         window.styleMask.insert(.fullSizeContentView)
+        
+        if let path = UserDefaults.standard.string(forKey: "lastOpenedProjectPath"), FileManager.default.fileExists(atPath: path) {
+            projectManager.openProject(at: URL(fileURLWithPath: path))
+        }
     }
     
     // MARK: - Calculator Selection
@@ -167,22 +187,26 @@ final class ProjectSettingsViewController: NSViewController, NSTextFieldDelegate
     }
     
     @IBAction func defaultSettings(_ sender: Any) {
-        headerSearchPath.stringValue = "$(SDKROOT)/include"
-        librarySearchPath.stringValue = "$(SDKROOT)/lib"
-        calculators.selectItem(withTitle: "Virtual Calculator")
-        calculator.image = NSImage(named: "VirtualCalculator")
-        
         UserDefaults.standard.set(false, forKey: "plainFallbackText")
         UserDefaults.standard.set(false, forKey: "compression")
         UserDefaults.standard.set("$(SDKROOT)/include", forKey: "include")
         UserDefaults.standard.set("$(SDKROOT)/lib", forKey: "lib")
         UserDefaults.standard.set("Prime", forKey: "calculator")
-        UserDefaults.standard.set("", forKey: "bin")
+        UserDefaults.standard.set("/usr/local/bin", forKey: "bin")
         UserDefaults.standard.set(true, forKey: "archiveProjectAppOnly")
+        
+        librarySearchPath.stringValue = ToolchainPaths.lib
+        headerSearchPath.stringValue = ToolchainPaths.include
+        calculators.selectItem(withTitle: "Virtual Calculator")
+        calculator.image = NSImage(named: "VirtualCalculator")
     }
     
  
     @IBAction func close(_ sender: Any) {
+        if let url = projectManager.projectDirectoryURL {
+            projectManager.saveProjectAs(at: url)
+        }
+        
         self.view.window?.close()
     }
 }

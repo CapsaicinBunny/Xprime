@@ -409,53 +409,6 @@ enum HPServices {
         )
     }
     
-//    static func hpPrimeBaseApplicationName(
-//        for appName: String,
-//        in directory: URL
-//    ) -> String {
-//        let applications: [String] = [
-//            "Function",
-//            "Solve",
-//            "Statistics 1Var",
-//            "Statistics 2Var",
-//            "Inference",
-//            "Parametric",
-//            "Polar",
-//            "Sequence",
-//            "Finance",
-//            "Linear Solver",
-//            "Triangle Solver",
-//            "",
-//            "",
-//            "",
-//            "Data Streamer",
-//            "Geometry",
-//            "Spreadsheet",
-//            "Advanced Graphing",
-//            "Graph 3D",
-//            "Explorer",
-//            "None",
-//            "Python"
-//        ]
-//        
-//        let fileURL = directory
-//            .appendingPathComponent("\(appName).hpappdir")
-//            .appendingPathComponent("\(appName).hpapp")
-//        do {
-//            let fileHandle = try FileHandle(forReadingFrom: fileURL)
-//            if let data = try fileHandle.read(upToCount: 21), !data.isEmpty {
-//                let name = applications[Int(data[20])]
-//                return name.isEmpty ? "None" : name
-//            }
-//            return "None"
-//        } catch {
-//#if Debug
-//            print("Base application name: None\n")
-//#endif
-//            return "None"
-//        }
-//    }
-    
     // MARK: -
     
     static func archiveHPAppDirectory(in directory: URL, named name: String, to desctinationURL: URL? = nil) -> (out: String?, err: String?, exitCode: Int32)  {
@@ -490,7 +443,7 @@ enum HPServices {
     static func loadHPPrgm(at url: URL) -> String? {
         
         if url.pathExtension.lowercased() == "hpprgm" || url.pathExtension.lowercased() == "hpappprgm" {
-            let result = ProcessRunner.run(executable: ToolchainPaths.bin.appendingPathComponent("ppl+"), arguments: [url.path, "-o", "/dev/stdout"])
+            let result = ProcessRunner.run(executable: URL(fileURLWithPath: ToolchainPaths.bin).appendingPathComponent("ppl+"), arguments: [url.path, "-o", "/dev/stdout"])
             if let out = result.out, !out.isEmpty {
                 return result.out
             }
@@ -545,23 +498,20 @@ enum HPServices {
     
     static func preProccess(at sourceURL: URL, to destinationURL: URL, compress: Bool = false) -> (out: String?, err: String?, exitCode: Int32) {
     
-        let command = ToolchainPaths.bin.appendingPathComponent("ppl+").path
-        
+        let command = URL(fileURLWithPath: ToolchainPaths.bin).appendingPathComponent("ppl+").path
         var arguments: [String] = [sourceURL.path, "-o", destinationURL.path]
         
         if compress {
             arguments.append(contentsOf: ["--compress"])
         }
         
-        let include = UserDefaults.standard.object(forKey: "include") as? String ?? "$(SDKROOT)/include"
-        if include.isEmpty == false {
-            let path = include.replacingOccurrences(of: "$(SDKROOT)", with: ToolchainPaths.developerRoot.appendingPathComponent("usr").path)
+        if ToolchainPaths.include.isEmpty == false {
+            let path = ToolchainPaths.include.replacingOccurrences(of: "$(SDKROOT)", with: ToolchainPaths.developerRoot.appendingPathComponent("usr").path)
             arguments.append(contentsOf: ["-I\(path)"])
         }
         
-        let lib = UserDefaults.standard.object(forKey: "lib") as? String ?? "$(SDKROOT)/lib"
-        if lib.isEmpty == false {
-            let path = lib.replacingOccurrences(of: "$(SDKROOT)", with: ToolchainPaths.developerRoot.appendingPathComponent("usr").path)
+        if ToolchainPaths.lib.isEmpty == false {
+            let path = ToolchainPaths.lib.replacingOccurrences(of: "$(SDKROOT)", with: ToolchainPaths.developerRoot.appendingPathComponent("usr").path)
             arguments.append(contentsOf: ["-L\(path)"])
         }
         

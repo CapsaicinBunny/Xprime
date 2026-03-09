@@ -5,6 +5,12 @@
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>xprimeproj</string>
+				<string>ppl</string>
+				<string>ppl+</string>
+			</array>
 			<key>CFBundleTypeIconFile</key>
 			<string>ProjectFile</string>
 			<key>CFBundleTypeName</key>
@@ -15,7 +21,7 @@
 			<string>Default</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>uk.insoft.xprime.xprimeproj</string>
+				<string>uk.insoft.Xprime.xprimeproj</string>
 			</array>
 		</dict>
 	</array>
@@ -45,7 +51,7 @@
 				<string></string>
 			</dict>
 			<key>UTTypeIdentifier</key>
-			<string>uk.insoft.xprime.xprimeproj</string>
+			<string>uk.insoft.Xprime.xprimeproj</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -64,10 +70,16 @@
 			</array>
 			<key>UTTypeDescription</key>
 			<string>Xprime Project</string>
+<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>xprimeproj</string>
+				<string>ppl</string>
+				<string>ppl+</string>
+			</array>
 			<key>UTTypeIcons</key>
 			<dict/>
 			<key>UTTypeIdentifier</key>
-			<string>uk.insoft.xprime.xprimeproj</string>
+			<string>uk.insoft.Xprime.xprimeproj</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>

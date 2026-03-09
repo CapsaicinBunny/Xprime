@@ -30,11 +30,15 @@ enum ToolchainPaths {
             .appendingPathComponent("Contents/Resources/Developer")
     }
 
-    static var bin: URL {
-        URL(fileURLWithPath: "/usr/local/bin")
+    static var bin: String {
+        resolveUserPath(
+            key: "bin",
+            fallback: "/usr/local/bin",
+            bundled: developerRoot.appendingPathComponent("usr/bin")
+        )
     }
 
-    static var include: URL {
+    static var include: String {
         resolveUserPath(
             key: "include",
             fallback: "$(SDKROOT)/include",
@@ -42,7 +46,7 @@ enum ToolchainPaths {
         )
     }
 
-    static var lib: URL {
+    static var lib: String {
         resolveUserPath(
             key: "lib",
             fallback: "$(SDKROOT)/lib",
@@ -54,14 +58,14 @@ enum ToolchainPaths {
         key: String,
         fallback: String,
         bundled: URL
-    ) -> URL {
+    ) -> String {
 
         let value = UserDefaults.standard.string(forKey: key) ?? fallback
 
         if value == "~" {
-            return bundled
+            return bundled.path
         }
 
-        return URL(fileURLWithPath: value)
+        return value
     }
 }

@@ -65,7 +65,7 @@ final class MainViewController: NSViewController, NSTextViewDelegate, NSToolbarI
         // Managers that don’t depend on window
         documentManager = DocumentManager(editor: codeEditorTextView, outputTextView: outputTextView)
         documentManager.delegate = self
-        projectManager = ProjectManager(documentManager: documentManager)
+        projectManager = ProjectManager()
         projectManager.delegate = self
         statusManager = StatusManager(editor: codeEditorTextView, statusLabel: statusLabel)
         
@@ -1095,7 +1095,7 @@ final class MainViewController: NSViewController, NSTextViewDelegate, NSToolbarI
         from sourceURL: URL,
         to destinationURL: URL
     ) {
-        let command = ToolchainPaths.bin.appendingPathComponent("note").path
+        let command = ToolchainPaths.bin + "/note"
         var arguments: [String] = [
             sourceURL.path,
             "-o",
@@ -1283,7 +1283,7 @@ final class MainViewController: NSViewController, NSTextViewDelegate, NSToolbarI
             return
         }
         
-        let contents = ProcessRunner.run(executable: ToolchainPaths.bin.appendingPathComponent("ppl+"), arguments: [currentURL.path, "--reformat", "-o", "/dev/stdout"])
+        let contents = ProcessRunner.run(executable: URL(fileURLWithPath: ToolchainPaths.bin + "/ppl+"), arguments: [currentURL.path, "--reformat", "-o", "/dev/stdout"])
         if let out = contents.out, !out.isEmpty {
             codeEditorTextView.string = out
         }

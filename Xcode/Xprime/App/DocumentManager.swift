@@ -68,7 +68,7 @@ final class DocumentManager {
     
     private func saveNote(url: URL) {
         saveDocument(to: url.appendingPathExtension("ntf"))
-        let path = ToolchainPaths.bin.appendingPathComponent("note")
+        let path = URL(fileURLWithPath: ToolchainPaths.bin).appendingPathComponent("note")
         
         let fallback = UserDefaults.standard.object(forKey: "plainFallbackText") as? Bool ?? false
         var arguments: [String] = [url.appendingPathExtension("ntf").path, "-o", url.path]
@@ -104,7 +104,7 @@ final class DocumentManager {
         successLog: String? = nil,
         printStdErrOnSuccess: Bool = false
     ) {
-        let path = ToolchainPaths.bin.appendingPathComponent(executableName)
+        let path = URL(fileURLWithPath: ToolchainPaths.bin).appendingPathComponent("executableName")
         let result = ProcessRunner.run(executable: path, arguments: [url.path, "-o", "/dev/stdout"])
         
         guard result.exitCode == 0, let out = result.out else {
@@ -139,7 +139,7 @@ final class DocumentManager {
             executableName: "grob",
             url: url,
             failureMessage: "Failed to read from the image file.",
-            successLog: "Importing \"\(url.pathExtension.uppercased())\" Image...\n"
+            successLog: "Importing \"\(url.lastPathComponent)\"\n"
         )
     }
 
@@ -157,6 +157,7 @@ final class DocumentManager {
             executableName: "font",
             url: url,
             failureMessage: "Failed to read from the font file.",
+            successLog: "Importing \"\(url.lastPathComponent)\"\n",
             printStdErrOnSuccess: true
         )
     }
@@ -164,7 +165,7 @@ final class DocumentManager {
     private func saveProgram(url: URL) {
         guard let currentDocumentURL else { return }
         
-        let path = ToolchainPaths.bin.appendingPathComponent("ppl+")
+        let path = URL(fileURLWithPath: ToolchainPaths.bin).appendingPathComponent("ppl+")
         let result = ProcessRunner.run(executable: path, arguments: [currentDocumentURL.path, "-o", url.path])
         
         guard result.exitCode == 0 else {
@@ -185,7 +186,7 @@ final class DocumentManager {
     }
     
     private func openProgram(url: URL) {
-        let path = ToolchainPaths.bin.appendingPathComponent("ppl+")
+        let path = URL(fileURLWithPath: ToolchainPaths.bin).appendingPathComponent("ppl+")
         let result = ProcessRunner.run(executable: path, arguments: [url.path, "-o", "/dev/stdout"])
         
         guard result.exitCode == 0, let out = result.out else {
@@ -210,7 +211,7 @@ final class DocumentManager {
     func openDocument(at url: URL) {
         let encoding: String.Encoding
         switch url.pathExtension.lowercased() {
-        case "prgm", "app":
+        case "prgm":
             encoding = .utf16
             
         case "hpnote", "hpappnote":

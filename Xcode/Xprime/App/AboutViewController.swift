@@ -83,7 +83,7 @@ final class AboutViewController: NSViewController {
     }
     
     private func version(forTool tool: String) -> String {
-        let command = ToolchainPaths.bin.appendingPathComponent(tool).path
+        let command = "\(ToolchainPaths.bin)/\(tool)"
         let version = ProcessRunner.run(
             executable: URL(fileURLWithPath: command),
             arguments: ["--version"]

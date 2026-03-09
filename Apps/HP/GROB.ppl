@@ -15,7 +15,7 @@ img = eval("+img+")
 
 
 w = int(img[1][0]); h = int(img[1][1]); bpp = int(img[1][2])
-m = 1 << bpp - 1; s = 64 / bpp
+m = (1 << bpp) - 1; s = 64 / bpp
 x = 0; y = 0
 
 size = len(img[0])
@@ -53,7 +53,7 @@ scaleY = int(eval("+scaleY+"))
 
 
 w = int(img[1][0]); h = int(img[1][1]); bpp = int(img[1][2])
-m = 1 << bpp - 1; s = 64 / bpp
+m = (1 << bpp) - 1; s = 64 / bpp
 x = 0; y = 0
 
 size = len(img[0])
@@ -74,4 +74,14 @@ EXPORT IMAGE(trgtG, img)
 BEGIN
   DIMGROB_P(trgtG, img(2,1), img(2,2));
   IMAGE(trgtG, 0, 0, img);
+END;
+
+EXPORT IMAGEW(I)
+BEGIN
+  RETURN I(2,1);
+END;
+
+EXPORT IMAGEH(I)
+BEGIN
+  RETURN I(2,2);
 END;

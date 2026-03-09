@@ -26,7 +26,7 @@ protocol ProjectManagerDelegate: AnyObject {
     // Called when a document is successfully saved
     func projectManagerDidSave(_ manager: ProjectManager)
     
-    // Called when saving fails
+    // Called when fails
     func projectManager(_ manager: ProjectManager, didFailWith error: Error)
     
     // Called when a project is successfully opened
@@ -37,6 +37,7 @@ protocol ProjectManagerDelegate: AnyObject {
     
     // Called when a project is successfully closed
     func projectManagerDidClose(_ manager: ProjectManager)
+    
 }
 
 fileprivate struct Project: Codable {
@@ -51,9 +52,8 @@ fileprivate struct Project: Codable {
 final class ProjectManager {
     weak var delegate: ProjectManagerDelegate?
     
-    private var documentManager: DocumentManager
     private(set) var projectDirectoryURL: URL? = nil
-    
+  
     var isProjectOpen: Bool {
         return projectDirectoryURL != nil
     }
@@ -136,10 +136,6 @@ final class ProjectManager {
         }
     }
     
-    init(documentManager: DocumentManager) {
-        self.documentManager = documentManager
-    }
-    
     // MARK: - Public API
     func openProject(at url: URL) {
         var project: Project!
@@ -156,7 +152,7 @@ final class ProjectManager {
                     include: "$(SDKROOT)/include",
                     lib: "$(SDKROOT)/lib",
                     calculator: "Prime",
-                    bin: "$(SDKROOT)/bin",
+                    bin: "/usr/local/bin",
                     archiveProjectAppOnly: true
                 )
             }
@@ -215,7 +211,7 @@ final class ProjectManager {
             include: UserDefaults.standard.object(forKey: "include") as? String ?? "$(SDKROOT)/include",
             lib: UserDefaults.standard.object(forKey: "lib") as? String ?? "$(SDKROOT)/lib",
             calculator: UserDefaults.standard.object(forKey: "calculator") as? String ?? "Prime",
-            bin: UserDefaults.standard.object(forKey: "bin") as? String ?? "$(SDKROOT)/bin",
+            bin: UserDefaults.standard.object(forKey: "bin") as? String ?? "/usr/local/bin",
             archiveProjectAppOnly: UserDefaults.standard.object(forKey: "archiveProjectAppOnly") as? Bool ?? true,
         )
         do {
@@ -262,13 +258,10 @@ final class ProjectManager {
             }
             
             defaultProjectSettings()
-            documentManager.outputTextView.appendTextAndScroll("⚠️ Default project settings applied\n")
             saveProjectAs(at: directoryURL.appendingPathComponent("\(name)/\(name).xprimeproj"))
-            
             projectDirectoryURL = directoryURL.appendingPathComponent(name)
-            documentManager.openDocument(at: directoryURL.appendingPathComponent("\(name)/main.prgm+"))
         } catch {
-            documentManager.outputTextView.appendTextAndScroll("❌ New Project Failed:-\n\(error).\n")
+            delegate?.projectManager(self, didFailWith: "Failed to create new project." as! Error)
             return false
         }
         return false
@@ -323,7 +316,7 @@ final class ProjectManager {
         UserDefaults.standard.set("$(SDKROOT)/include", forKey: "include")
         UserDefaults.standard.set("$(SDKROOT)/lib", forKey: "lib")
         UserDefaults.standard.set("Prime", forKey: "calculator")
-        UserDefaults.standard.set("$(SDKROOT)/bin", forKey: "bin")
+        UserDefaults.standard.set("/usr/local/bin", forKey: "bin")
         UserDefaults.standard.set(true, forKey: "archiveProjectAppOnly")
     }
 }
