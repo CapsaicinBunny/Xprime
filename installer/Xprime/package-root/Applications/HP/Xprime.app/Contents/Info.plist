@@ -9,8 +9,14 @@
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>xprimeproj</string>
+				<string>ppl</string>
+				<string>ppl+</string>
+			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>ProjectFile</string>
+			<string>Project</string>
 			<key>CFBundleTypeName</key>
 			<string>Xprime Project</string>
 			<key>CFBundleTypeRole</key>
@@ -19,7 +25,7 @@
 			<string>Default</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>uk.insoft.xprime.xprimeproj</string>
+				<string>uk.insoft.Xprime.xprimeproj</string>
 			</array>
 		</dict>
 	</array>
@@ -44,7 +50,7 @@
 		<string>MacOSX</string>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>20260308</string>
+	<string>20260310</string>
 	<key>DTCompiler</key>
 	<string>com.apple.compilers.llvm.clang.1_0</string>
 	<key>DTPlatformBuild</key>
@@ -91,13 +97,15 @@
 			</array>
 			<key>UTTypeDescription</key>
 			<string>Xprime Project</string>
+			<key>UTTypeIconFile</key>
+			<string>Project</string>
 			<key>UTTypeIcons</key>
 			<dict>
 				<key>UTTypeIconBadgeName</key>
-				<string></string>
+				<string>Project</string>
 			</dict>
 			<key>UTTypeIdentifier</key>
-			<string>uk.insoft.xprime.xprimeproj</string>
+			<string>uk.insoft.Xprime.xprimeproj</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -110,16 +118,27 @@
 	<key>UTImportedTypeDeclarations</key>
 	<array>
 		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>xprimeproj</string>
+				<string>ppl</string>
+				<string>ppl+</string>
+			</array>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.json</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>Xprime Project</string>
+			<key>UTTypeIconFile</key>
+			<string>Project</string>
 			<key>UTTypeIcons</key>
-			<dict/>
+			<dict>
+				<key>UTTypeIconBadgeName</key>
+				<string>Project</string>
+			</dict>
 			<key>UTTypeIdentifier</key>
-			<string>uk.insoft.xprime.xprimeproj</string>
+			<string>uk.insoft.Xprime.xprimeproj</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>

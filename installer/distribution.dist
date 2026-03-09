@@ -37,6 +37,6 @@
     </choice>
 
     <!-- Package references -->
-    <pkg-ref id="uk.insoft.xprime" installKBytes="4224" version="26.2">xprime.pkg</pkg-ref>
+    <pkg-ref id="uk.insoft.xprime" installKBytes="3788" version="26.2">xprime.pkg</pkg-ref>
     <pkg-ref id="uk.insoft.hp" installKBytes="20" version="1.0">hp.pkg</pkg-ref>
 </installer-gui-script>

@@ -1,8 +1,8 @@
 {
+  "archiveProjectAppOnly" : true,
+  "calculator" : "Prime",
   "compression" : false,
   "lib" : "$(SDKROOT)\/lib",
-  "calculator" : "Prime",
-  "include" : "$(SDKROOT)\/include",
   "bin" : "\/usr\/local\/bin",
-  "archiveProjectAppOnly" : true
+  "include" : "$(SDKROOT)\/include"
 }

@@ -17,8 +17,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fXT-8R-zZu">
+                            <visualEffectView fixedFrame="YES" blendingMode="behindWindow" material="dark" state="active" translatesAutoresizingMaskIntoConstraints="NO" id="5Ls-ez-5Wl">
+                                <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                            </visualEffectView>
+                            <scrollView fixedFrame="YES" borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fXT-8R-zZu">
                                 <rect key="frame" x="0.0" y="0.0" width="450" height="248"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <clipView key="contentView" drawsBackground="NO" id="6NS-un-wKL">
                                     <rect key="frame" x="0.0" y="0.0" width="450" height="248"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -42,40 +47,20 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
-                            <comboBox focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rFV-E7-Bvp">
-                                <rect key="frame" x="19" y="260" width="217" height="27"/>
+                            <comboBox focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rFV-E7-Bvp">
+                                <rect key="frame" x="19" y="244" width="217" height="27"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" buttonBordered="NO" completes="NO" numberOfVisibleItems="5" id="2Z9-bZ-lPp">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </comboBoxCell>
                             </comboBox>
-                            <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ob6-HE-IC3">
-                                <rect key="frame" x="330" y="265" width="100" height="16"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="16" id="1Wh-BH-Urz"/>
-                                    <constraint firstAttribute="width" constant="100" id="XnT-3p-Wku"/>
-                                </constraints>
-                                <sliderCell key="cell" controlSize="mini" alignment="left" minValue="0.01" maxValue="1" doubleValue="0.80000000000000004" tickMarkPosition="above" sliderType="linear" id="7eP-fw-7SZ"/>
-                            </slider>
                         </subviews>
-                        <constraints>
-                            <constraint firstAttribute="trailing" secondItem="fXT-8R-zZu" secondAttribute="trailing" id="BSG-TP-cNd"/>
-                            <constraint firstItem="Ob6-HE-IC3" firstAttribute="top" secondItem="JPh-bh-aek" secondAttribute="top" constant="19" id="CPV-UO-Ckc"/>
-                            <constraint firstItem="fXT-8R-zZu" firstAttribute="top" secondItem="Ob6-HE-IC3" secondAttribute="bottom" constant="17" id="dGE-zb-ipc"/>
-                            <constraint firstItem="fXT-8R-zZu" firstAttribute="leading" secondItem="JPh-bh-aek" secondAttribute="leading" id="gvp-fp-r3R"/>
-                            <constraint firstAttribute="trailing" secondItem="Ob6-HE-IC3" secondAttribute="trailing" constant="20" symbolic="YES" id="igM-Ei-aVD"/>
-                            <constraint firstItem="rFV-E7-Bvp" firstAttribute="leading" secondItem="JPh-bh-aek" secondAttribute="leading" constant="20" symbolic="YES" id="s96-Ad-GfU"/>
-                            <constraint firstItem="rFV-E7-Bvp" firstAttribute="top" secondItem="JPh-bh-aek" secondAttribute="top" constant="14" id="tr1-iJ-k1e"/>
-                            <constraint firstAttribute="bottom" secondItem="fXT-8R-zZu" secondAttribute="bottom" id="xD9-z3-pHP"/>
-                            <constraint firstItem="fXT-8R-zZu" firstAttribute="top" secondItem="rFV-E7-Bvp" secondAttribute="bottom" constant="14" id="yFP-GR-HNU"/>
-                            <constraint firstItem="Ob6-HE-IC3" firstAttribute="leading" secondItem="rFV-E7-Bvp" secondAttribute="trailing" constant="97" id="yxR-Wp-OkL"/>
-                        </constraints>
                     </view>
                     <connections>
                         <outlet property="catalogComboBox" destination="rFV-E7-Bvp" id="PQE-2T-o9V"/>
                         <outlet property="catalogHelpTextView" destination="v61-61-qWD" id="JfY-iO-Cex"/>
-                        <outlet property="catalogSlider" destination="Ob6-HE-IC3" id="LXT-sw-oll"/>
                     </connections>
                 </viewController>
                 <customObject id="0qd-iU-jch" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -1789,11 +1774,11 @@ Gw
         <image name="folder" catalog="system" width="18" height="14"/>
         <image name="gear" catalog="system" width="17" height="16"/>
         <image name="hammer" catalog="system" width="20" height="18"/>
-        <image name="hammer.fill" catalog="system" width="15" height="14"/>
+        <image name="hammer.fill" catalog="system" width="19" height="17"/>
         <image name="icon" width="38" height="38"/>
         <image name="info.circle" catalog="system" width="15" height="15"/>
         <image name="inset.filled.bottomthird.square" catalog="system" width="15" height="14"/>
-        <image name="play.fill" catalog="system" width="12" height="13"/>
+        <image name="play.fill" catalog="system" width="10" height="11"/>
         <image name="plus" catalog="system" width="14" height="13"/>
         <image name="ppl" width="16" height="16"/>
         <image name="questionmark.circle" catalog="system" width="15" height="15"/>
