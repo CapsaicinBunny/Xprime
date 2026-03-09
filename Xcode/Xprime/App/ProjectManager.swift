@@ -153,10 +153,10 @@ final class ProjectManager {
                 defaultProjectSettings()
                 project = .init(
                     compression: false,
-                    include: "$(SDK)/include",
-                    lib: "$(SDK)/lib",
+                    include: "$(SDKROOT)/include",
+                    lib: "$(SDKROOT)/lib",
                     calculator: "Prime",
-                    bin: "$(SDK)/bin",
+                    bin: "$(SDKROOT)/bin",
                     archiveProjectAppOnly: true
                 )
             }
@@ -212,10 +212,10 @@ final class ProjectManager {
     func saveProjectAs(at url: URL) -> Bool {
         let project = Project(
             compression: UserDefaults.standard.object(forKey: "compression") as? Bool ?? false,
-            include: UserDefaults.standard.object(forKey: "include") as? String ?? "$(SDK)/include",
-            lib: UserDefaults.standard.object(forKey: "lib") as? String ?? "$(SDK)/lib",
+            include: UserDefaults.standard.object(forKey: "include") as? String ?? "$(SDKROOT)/include",
+            lib: UserDefaults.standard.object(forKey: "lib") as? String ?? "$(SDKROOT)/lib",
             calculator: UserDefaults.standard.object(forKey: "calculator") as? String ?? "Prime",
-            bin: UserDefaults.standard.object(forKey: "bin") as? String ?? "$(SDK)/bin",
+            bin: UserDefaults.standard.object(forKey: "bin") as? String ?? "$(SDKROOT)/bin",
             archiveProjectAppOnly: UserDefaults.standard.object(forKey: "archiveProjectAppOnly") as? Bool ?? true,
         )
         do {
@@ -320,10 +320,10 @@ final class ProjectManager {
     
     private func defaultProjectSettings() {
         UserDefaults.standard.set(false, forKey: "compression")
-        UserDefaults.standard.set("$(SDK)/include", forKey: "include")
-        UserDefaults.standard.set("$(SDK)/lib", forKey: "lib")
+        UserDefaults.standard.set("$(SDKROOT)/include", forKey: "include")
+        UserDefaults.standard.set("$(SDKROOT)/lib", forKey: "lib")
         UserDefaults.standard.set("Prime", forKey: "calculator")
-        UserDefaults.standard.set("$(SDK)/bin", forKey: "bin")
+        UserDefaults.standard.set("$(SDKROOT)/bin", forKey: "bin")
         UserDefaults.standard.set(true, forKey: "archiveProjectAppOnly")
     }
 }

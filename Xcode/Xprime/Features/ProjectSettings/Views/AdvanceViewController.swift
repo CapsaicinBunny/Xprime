@@ -75,7 +75,7 @@ final class AdvanceViewController: NSViewController, NSTextFieldDelegate, NSComb
     }
     
     private func configureFallbackSelection() {
-        let fallback = UserDefaults.standard.object(forKey: "plainFallbackText") as? Bool ?? false
+        let fallback = UserDefaults.standard.object(forKey: "plainFallbackText") as? Bool ?? true
         self.fallback.state = fallback ? .on : .off
     }
     

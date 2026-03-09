@@ -147,5 +147,6 @@ final class SettingsViewController: NSViewController, NSTextFieldDelegate {
     private func configureSubtitutionActions() {
         substitution.target = self
         substitution.action = #selector(preferSubtitutionSwitchToggled(_:))
+        substitution.state = UserDefaults.standard.bool(forKey: "SubtitutionEnabled") ? .on : .off
     }
 }

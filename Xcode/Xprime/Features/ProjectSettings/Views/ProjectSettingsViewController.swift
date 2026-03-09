@@ -42,8 +42,8 @@ final class ProjectSettingsViewController: NSViewController, NSTextFieldDelegate
         librarySearchPath.delegate = self
         headerSearchPath.delegate = self
         
-        let include = UserDefaults.standard.object(forKey: "include") as? String ?? "$(SDK)/include"
-        let lib = UserDefaults.standard.object(forKey: "lib") as? String ?? "$(SDK)/lib"
+        let include = UserDefaults.standard.object(forKey: "include") as? String ?? "$(SDKROOT)/include"
+        let lib = UserDefaults.standard.object(forKey: "lib") as? String ?? "$(SDKROOT)/lib"
         let calculator = UserDefaults.standard.object(forKey: "calculator") as? String ?? "Prime"
 
         
@@ -167,15 +167,15 @@ final class ProjectSettingsViewController: NSViewController, NSTextFieldDelegate
     }
     
     @IBAction func defaultSettings(_ sender: Any) {
-        headerSearchPath.stringValue = "$(SDK)/include"
-        librarySearchPath.stringValue = "$(SDK)/lib"
+        headerSearchPath.stringValue = "$(SDKROOT)/include"
+        librarySearchPath.stringValue = "$(SDKROOT)/lib"
         calculators.selectItem(withTitle: "Virtual Calculator")
         calculator.image = NSImage(named: "VirtualCalculator")
         
         UserDefaults.standard.set(false, forKey: "plainFallbackText")
         UserDefaults.standard.set(false, forKey: "compression")
-        UserDefaults.standard.set("$(SDK)/include", forKey: "include")
-        UserDefaults.standard.set("$(SDK)/lib", forKey: "lib")
+        UserDefaults.standard.set("$(SDKROOT)/include", forKey: "include")
+        UserDefaults.standard.set("$(SDKROOT)/lib", forKey: "lib")
         UserDefaults.standard.set("Prime", forKey: "calculator")
         UserDefaults.standard.set("", forKey: "bin")
         UserDefaults.standard.set(true, forKey: "archiveProjectAppOnly")

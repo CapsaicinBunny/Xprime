@@ -83,6 +83,7 @@ final class CodeEditorTextView: NSTextView {
         setupEditor()
         loadTheme(named: ThemeLoader.shared.preferredTheme)
         loadGrammar(named: GrammarLoader.shared.preferredGrammar)
+        smartSubtitution = UserDefaults.standard.bool(forKey: "SubtitutionEnabled")
     }
     
     // MARK: - Setup

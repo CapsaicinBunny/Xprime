@@ -1,0 +1,123 @@
+LOCAL GLYPH(trgtG, ascii, x, y, font, color, weight)
+BEGIN
+ LOCAL g := font[2, ascii];
+ LOCAL xAdvance; xAdvance := BITAND(BITSR(g,32), 255);
+  IF BITAND(g,#FFFFFFFF)==0 THEN
+    RETURN xAdvance;
+  END;
+  
+  LOCAL w, h, dX, dY, xx;
+  LOCAL yAdvance; yAdvance := font[5];
+
+  w := BITAND(BITSR(g, 16), 255);
+  h := BITAND(BITSR(g, 24), 255);
+ 
+  dX := BITAND(BITSR(g, 40), 255);
+  dY := BITAND(BITSR(g, 48), 255) - 256;
+ 
+  x := x + dX;
+  y := y + yAdvance + dY;
+  
+  LOCAL bitmap; bitmap := font[1];
+
+  LOCAL offset; offset := BITAND(g, 65535);
+  LOCAL bitPosition; bitPosition := BITAND(offset, 7) * 8;
+  offset := BITSR(offset, 3) + 1;
+  LOCAL bits; bits := BITSR(bitmap[offset], bitPosition);
+  
+  REPEAT
+    FOR xx FROM 1 TO w DO
+      IF bitPosition == 64 THEN
+        bitPosition := 0;
+        offset := offset + 1;
+        bits := bitmap[offset];
+      END;
+     
+      IF BITAND(bits, 1) == 1 THEN
+        IF weight == 1 THEN
+          PIXON_P(trgtG, x + xx,y, color);
+        ELSE
+          LINE_P(trgtG, x + xx, y, x + xx + weight, y, color);
+        END;
+      END;
+      
+      bitPosition := bitPosition + 1;
+      bits := BITSR(bits, 1);
+    END;
+   
+    y + 1 ▶ y;
+    h - 1 ▶ h;
+  UNTIL h == 0;
+  
+  RETURN xAdvance + weight;
+END;
+
+LOCAL GLYPHSIZE(ascii, font, weight)
+BEGIN
+  RETURN {BITAND(BITSR(font[2, ascii],32), 255) + weight, font[5]};
+END;
+
+EXPORT TEXTSIZE(text, font, weight)
+BEGIN
+  LOCAL i, l := ASC(text);
+  LOCAL x := 0;
+ 
+  FOR i := 1 TO SIZE(l) DO
+    IF l[i] < font[3] OR l[i] > font[4] THEN
+      CONTINUE;
+    END;
+    LOCAL j = GLYPHSIZE(l[i] - font[3] + 1, font, weight);
+    x := x + j[1];
+  END;
+  RETURN {x, font[5]};
+END;
+
+EXPORT TEXTOUT(text, G, x, y, font, textColor, backgroundColor, weight)
+BEGIN
+  LOCAL i, l := ASC(text);
+  LOCAL size := TEXTSIZE(text, font, weight);
+  
+  IF backgroundColor > -1 THEN
+    RECT_P(G, x, y, x + size(1), y + size(2), backgroundColor);
+  END;
+  
+  FOR i := 1 TO SIZE(l) DO
+    IF x >= 320 THEN
+      BREAK;
+    END;
+    IF l[i] == 10 THEN
+      x := 0;
+      y := y + font[5];
+      CONTINUE;
+    END;
+    IF l[i] < font[3] OR l[i] > font[4] THEN
+      CONTINUE;
+    END;
+    x := x + GLYPH(G, l[i] - font[3] + 1, x, y, font, textColor, weight);
+  END;
+END;
+
+EXPORT TEXTOUT(text, x, y)
+BEGIN
+    TEXTOUT(text, G0, x, y, Font10, 0, -1, 1);
+END;
+
+EXPORT TEXTOUT(text, G, x, y)
+BEGIN
+    TEXTOUT(text, G, x, y, Font10, 0, -1, 1);
+END;
+
+EXPORT TEXTOUT(text, x, y, font, textColor)
+BEGIN
+    TEXTOUT(text, G0, x, y, font, textColor, -1, 1);
+END;
+
+EXPORT TEXTOUT(text, G, x, y, font, textColor)
+BEGIN
+    TEXTOUT(text, G, x, y, font, textColor, -1, 1);
+END;
+
+EXPORT TEXTOUT(text, G, x, y, font, textColor, backgroundColor)
+BEGIN
+    TEXTOUT(text, G, x, y, font, textColor, backgroundColor, 1);
+END;

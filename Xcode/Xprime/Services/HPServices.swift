@@ -553,15 +553,15 @@ enum HPServices {
             arguments.append(contentsOf: ["--compress"])
         }
         
-        let include = UserDefaults.standard.object(forKey: "include") as? String ?? "$(SDK)/include"
+        let include = UserDefaults.standard.object(forKey: "include") as? String ?? "$(SDKROOT)/include"
         if include.isEmpty == false {
-            let path = include.replacingOccurrences(of: "$(SDK)", with: ToolchainPaths.developerRoot.appendingPathComponent("usr").path)
+            let path = include.replacingOccurrences(of: "$(SDKROOT)", with: ToolchainPaths.developerRoot.appendingPathComponent("usr").path)
             arguments.append(contentsOf: ["-I\(path)"])
         }
         
-        let lib = UserDefaults.standard.object(forKey: "lib") as? String ?? "$(SDK)/lib"
+        let lib = UserDefaults.standard.object(forKey: "lib") as? String ?? "$(SDKROOT)/lib"
         if lib.isEmpty == false {
-            let path = lib.replacingOccurrences(of: "$(SDK)", with: ToolchainPaths.developerRoot.appendingPathComponent("usr").path)
+            let path = lib.replacingOccurrences(of: "$(SDKROOT)", with: ToolchainPaths.developerRoot.appendingPathComponent("usr").path)
             arguments.append(contentsOf: ["-L\(path)"])
         }
         

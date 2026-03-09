@@ -37,7 +37,7 @@ enum ToolchainPaths {
     static var include: URL {
         resolveUserPath(
             key: "include",
-            fallback: "$(SDK)/include",
+            fallback: "$(SDKROOT)/include",
             bundled: developerRoot.appendingPathComponent("usr/include")
         )
     }
@@ -45,7 +45,7 @@ enum ToolchainPaths {
     static var lib: URL {
         resolveUserPath(
             key: "lib",
-            fallback: "$(SDK)/lib",
+            fallback: "$(SDKROOT)/lib",
             bundled: developerRoot.appendingPathComponent("usr/lib")
         )
     }

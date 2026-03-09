@@ -6,12 +6,8 @@
 // Jurgen Keller <jkeller@gmx.ch>
 // Converted to P+ by Richie Hughes <developer@insoft.uk>
 // http://calc.fjk.ch
-
-regex >`\bauto\b`i v\`__COUNTER__+1`
-regex =`^ *\bauto *: *([a-z]\w*)` g\`__COUNTER__+1`:$1
-regex `\b([a-zA-Z_]\w*) *\: *([a-zA-Z]\w*(?:::[a-zA-Z]\w*)*)` alias $2:=$1;$1
-
-sd: Shuttle::Data := {
+alias Shuttle::Data := sd;
+Shuttle::Data := {
   -2, 1, 1155, 879, 1123, 906,
   -2, 2, 2005, 2, 2005, 58, 
   -2, 3, 1899, 489, 1936, 92, 
@@ -953,10 +949,10 @@ sd: Shuttle::Data := {
   2, 1727, 806, 1521, 776, 
   0
 };
-
-local gpc: Shuttle::GetPenColor(Pen)
+alias Shuttle::GetPenColor := gpc;
+local Shuttle::GetPenColor(Pen)
 begin
-  local C := RGB(0, 0, 0);
+  var C := RGB(0, 0, 0);
   case
     if Pen == 1 then C := RGB(255, 255, 0) end;
     if Pen == 2 then C := RGB(  0, 255, 255) end;
@@ -968,15 +964,15 @@ begin
   end;
   return C;
 end;
-
-local gpt: Shuttle::GetPoint(I)
+alias Shuttle::GetPoint := gpt;
+local Shuttle::GetPoint(I)
 begin
   return { Shuttle::Data(I) / 9.375, Shuttle::Data(I+1) / 9.375 };
 end;
 
 export START()
 begin
-  local I, N, Color, Pt1, Pt2;
+  var I, N, Color, Pt1, Pt2;
   
   alias point::first = Pt1;
   alias point::last = Pt2;

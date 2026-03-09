@@ -62,7 +62,6 @@ final class AboutViewController: NSViewController {
             let bundleShortVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "26.0"
             let bundleVersion = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "0"
             Version.stringValue = "Version \(bundleShortVersion).\(bundleVersion)"
-//            Tools.isHidden = false
             return
         }
         self.view.window?.close()

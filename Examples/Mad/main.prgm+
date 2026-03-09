@@ -9,19 +9,26 @@ Apple := #50B040:32h, LimeGreen := #00FF00:32h, Chocolate := #400808:32h, Brown 
 Olive := #808000:32h, Tangerine := #FFD000:32h, Yellow := #FFFF00:32h, Khaki := #F0E090:32h, Tan := #D0B090:32h, \
 Maroon := #800000:32h, SnowWhite := #FFF0F0:32h, Clear := #FF000000:32h \
 @Color;
-regex `\b([a-zA-Z_]\w*) *\: *([a-zA-Z]\w*(?:::[a-zA-Z]\w*)*)` alias $2:=$1;$1
+
 #define COPYRIGHT   "COPYRIGHT 1985 E.C. PUBLICATIONS"
 #define END_OF_DATA 999
 #define SCREEN_MIDDLE       120
 #define SCREEN_CENTRE       160
 
 /// PPL Data from file.
-#include "data.prgm"
+LOCAL {$I "data.ppl"}
 
-LnD: line;
-Scl: scale = 1.0;
+alias line := LnD;
+alias scale := Scl;
 
-Setup: MAD::Init()
+LOCAL line;
+LOCAL scale := 1.0;
+
+alias MAD::Init := Init;
+alias MAD::Read := Read;
+alias MAD::Draw := Draw;
+
+MAD::Init()
 begin
     line = {0, 0, 0, 0};
     scale = 1.0;
@@ -239,7 +246,7 @@ begin
     TEXTOUT_P(COPYRIGHT, 76, 224, 1);
 end;
 
-Read: MAD::Read()
+MAD::Read()
 begin
     line(1) = DATA(I);
     line(2) = DATA(I+1);
@@ -248,10 +255,12 @@ begin
     I = I + 4;
 end;
 
-Draw: MAD::Draw()
+MAD::Draw()
 begin
+    alias color := C;
+    
     RECT(Color.LimeGreen);
-    local C: color = Color.White;
+    local color = Color.White;
     local x1, y1, x2, y2;
 
     I:=1;

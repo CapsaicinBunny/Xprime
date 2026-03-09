@@ -7,7 +7,7 @@
 export START()
 begin
 	RECT(BLACK);
-	HP.TEXT(G0, "CGA Font Example", 0, 0, CGA, WHITE);
+	Font.TEXTOUT("CGA Font Example", G0, 0, 0, CGA, WHITE);
 	WAIT(-1);
     return 0;
 end;

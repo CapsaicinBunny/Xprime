@@ -41,10 +41,11 @@ final class MainViewController: NSViewController, NSTextViewDelegate, NSToolbarI
     @IBOutlet private weak var outputButton: NSButton!
     @IBOutlet private weak var clearOutputButton: NSButton!
     @IBOutlet private weak var baseApplication: NSPopUpButton!
+    @IBOutlet private weak var projectIcon: ClickableImageView!
     
     // MARK: - Managers
     private var documentManager: DocumentManager!
-    private var projectManager: ProjectManager!
+    var projectManager: ProjectManager!
     private var themeManager: ThemeManager!
     private var updateManager: UpdateManager!
     private var statusManager: StatusManager!
@@ -1442,7 +1443,6 @@ extension MainViewController: DocumentManagerDelegate {
 #endif
         if let url = documentManager.currentDocumentURL {
             loadAppropriateGrammar(forType: url.pathExtension.lowercased())
-            appendToRecentMenu(url: url)
         }
         
         gutterView.updateLines()

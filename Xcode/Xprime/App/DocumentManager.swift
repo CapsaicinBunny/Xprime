@@ -97,61 +97,68 @@ final class DocumentManager {
         delegate?.documentManagerDidSave(self)
     }
     
-    private func openAdafruitGFXFont(url: URL) {
-        let contents = ProcessRunner.run(executable: ToolchainPaths.bin.appendingPathComponent("font"), arguments: [url.path, "-o", "/dev/stdout"])
-        if let out = contents.out, !out.isEmpty {
-            self.outputTextView.appendTextAndScroll("Importing Adafruit GFX Font...\n")
-            
-            editor.string = out
-            editor.undoManager?.removeAllActions()
-            currentDocumentURL = nil
-            documentIsModified = false
-            delegate?.documentManagerDidOpen(self)
-        }
-        self.outputTextView.appendTextAndScroll(contents.err ?? "")
-    }
-    
-    private func openImage(url: URL) {
-        let command = ToolchainPaths.developerRoot.appendingPathComponent("usr")
-            .appendingPathComponent("bin")
-            .appendingPathComponent("grob")
-            .path
-        
-        let commandURL = URL(fileURLWithPath: command)
-        let contents = ProcessRunner.run(executable: commandURL, arguments: [url.path, "-o", "/dev/stdout"])
-        if let out = contents.out, !out.isEmpty {
-            self.outputTextView.appendTextAndScroll("Importing \"\(url.pathExtension.uppercased())\" Image...\n")
-            
-            editor.string = out
-            editor.undoManager?.removeAllActions()
-            currentDocumentURL = nil
-            documentIsModified = false
-            delegate?.documentManagerDidOpen(self)
-        }
-        self.outputTextView.appendTextAndScroll(contents.err ?? "")
-    }
-    
-    private func openNote(url: URL) {
-        let path = ToolchainPaths.bin.appendingPathComponent("note")
+    private func openWithTool(
+        executableName: String,
+        url: URL,
+        failureMessage: String,
+        successLog: String? = nil,
+        printStdErrOnSuccess: Bool = false
+    ) {
+        let path = ToolchainPaths.bin.appendingPathComponent(executableName)
         let result = ProcessRunner.run(executable: path, arguments: [url.path, "-o", "/dev/stdout"])
         
         guard result.exitCode == 0, let out = result.out else {
             let error = NSError(
                 domain: "Error",
                 code: 0,
-                userInfo: [NSLocalizedDescriptionKey: "Failed to read from the note file."]
+                userInfo: [NSLocalizedDescriptionKey: failureMessage]
             )
             outputTextView.appendTextAndScroll(result.err ?? "")
             delegate?.documentManager(self, didFailToOpen: error)
             return
         }
         
-        outputTextView.appendTextAndScroll(result.err ?? "")
+        if let successLog {
+            outputTextView.appendTextAndScroll(successLog)
+        }
+        
+        if printStdErrOnSuccess {
+            outputTextView.appendTextAndScroll(result.err ?? "")
+        }
+        
         editor.string = out
         editor.undoManager?.removeAllActions()
-        currentDocumentURL = url
+        currentDocumentURL = nil
         documentIsModified = false
+        
         delegate?.documentManagerDidOpen(self)
+    }
+    
+    private func openImage(url: URL) {
+        openWithTool(
+            executableName: "grob",
+            url: url,
+            failureMessage: "Failed to read from the image file.",
+            successLog: "Importing \"\(url.pathExtension.uppercased())\" Image...\n"
+        )
+    }
+
+    private func openNote(url: URL) {
+        openWithTool(
+            executableName: "note",
+            url: url,
+            failureMessage: "Failed to read from the note file.",
+            printStdErrOnSuccess: true
+        )
+    }
+    
+    private func openAdafruitGFXFont(url: URL) {
+        openWithTool(
+            executableName: "font",
+            url: url,
+            failureMessage: "Failed to read from the font file.",
+            printStdErrOnSuccess: true
+        )
     }
     
     private func saveProgram(url: URL) {

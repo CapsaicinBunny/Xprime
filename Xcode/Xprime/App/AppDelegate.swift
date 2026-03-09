@@ -96,5 +96,18 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSToolbarItemValidation, NSM
         }
         return true
     }
+    
+    func application(_ application: NSApplication, open urls: [URL]) {
+        guard let window = NSApplication.shared.windows.first,
+              let vc = window.contentViewController as? MainViewController
+        else { return }
+        
+        for url in urls {
+            if url.pathExtension.lowercased() == "xprimeproj" {
+                vc.projectManager.openProject(at: url)
+                return
+            }
+        }
+    }
 }
 

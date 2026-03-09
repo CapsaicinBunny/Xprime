@@ -1,9 +1,8 @@
 {
-  "lib" : "",
   "calculator" : "Prime",
-  "archiveProjectAppOnly" : false,
   "bin" : "",
   "compression" : true,
-  "baseApplicationName" : "Geometry",
+  "lib" : "$(SDK)\/lib",
+  "archiveProjectAppOnly" : false,
   "include" : "$(SDK)\/include"
 }

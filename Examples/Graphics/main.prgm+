@@ -1,12 +1,11 @@
 #pragma mode( separator(.,;) integer(h64) assignment(=) indentation(2) )
-#require "GROB"
-
-#include "spectrum.prgm+"
+uses HP;
+local {$I "spectrum.ppl"}
 
 export START()
 begin
 	RECT();
-	IMAGE(G0, 0, 0, spectrum, 20, 240);
+	HP.IMAGE(G0, 0, 0, spectrum, 20, 240);
 	WAIT(-1);
 	
     return 0;
