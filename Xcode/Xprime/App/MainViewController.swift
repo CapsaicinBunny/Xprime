@@ -715,6 +715,9 @@ final class MainViewController: NSViewController, NSTextViewDelegate, NSToolbarI
             .appendingPathComponent("hpappdir")
 
         for unit in units {
+            if HPServices.hpAppDirectoryIsInstalled(named: unit) {
+                continue
+            }
             let fileURL = basePath
                 .appendingPathComponent(unit)
                 .appendingPathExtension("hpappdir")

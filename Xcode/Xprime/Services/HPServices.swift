@@ -550,7 +550,6 @@ enum HPServices {
                 .appendingPathComponent("Documents/HP Prime/Calculators/Prime")
                 .appendingPathComponent(appURL.lastPathComponent)
         }
-        
 
         do {
             if FileManager.default.fileExists(atPath: destinationURL.path) {
