@@ -41,6 +41,8 @@ Hold down the **Option (⌥) key**, then **click and hold** on the About window 
 |.prgm+|HP Prime PRGM+ extended program source code|UTF8|
 |.ppl+|HP Prime PPL+ extended program source code|UTF8|
 
+>In light of [HP Prime Development Tools](https://marketplace.visualstudio.com/ite...de-hpprime) Xprime will be addopting .hpppl and .hppplplus file type and drop .prgm+.
+
 Typical File Structure for an HP Prime **Application**
 ```
 MyApp/
