@@ -28,8 +28,6 @@ Hold down the **Option (⌥) key**, then **click and hold** on the About window 
 ### Supported File Types
 |Type|Description|Format|
 |:-|:-|:-|
-|.ppl|HP Prime Programming Language source file|UTF8|
-|.prgm|HP Prime program source code|UTF16le|
 |.ntf|NoteText format|UTF8|
 |.md|Markdown Language|UTF8|
 |.bmp|Bitmap|Image|
@@ -39,6 +37,10 @@ Hold down the **Option (⌥) key**, then **click and hold** on the About window 
 |.hpappnote|HP Prime note|Binary|
 |.hpprgm|HP Prime program (exported/packaged)|Binary|
 |.hpappprgm|HP Prime application (exported/packaged)|Binary|
+|.prgm|HP Prime program source code|UTF16le|
+|.hpppl|HP Prime Programming Language source file|UTF8|
+|.hppplplus|HP Prime PPL+ extended program source code|UTF8|
+|.ppl|HP Prime Programming Language source file|UTF8|
 |.ppl+|HP Prime PPL+ extended program source code|UTF8|
 
 >In light of [HP Prime Development Tools](https://marketplace.visualstudio.com/ite...de-hpprime)￼ support, Xprime will adopt the .hpppl and .hppplplus file types and discontinue .prgm+. This change will simplify development for those using either Visual Studio Code or Xprime.
