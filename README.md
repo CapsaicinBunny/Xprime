@@ -31,13 +31,13 @@ Hold down the **Option (⌥) key**, then **click and hold** on the About window 
 |.xprimeproj|Xprime project|JSON|
 |.ntf|NoteText|UTF8|
 |.md|Markdown Language|UTF8|
-|.bmp|Bitmap (.hpppl)|Image|
-|.png|Portable Network Graphic (.hpppl)|Image|
-|.h|Adafruit GFX Font (.hpppl)|UTF8|
-|.hpprgm|Standalone program binary|Binary|
-|.hpappprgm|App program binary (inside .hpappdir)|Binary|
-|.hpnote|Standalone note binary|Binary|
-|.hpappnote|App note binary (inside .hpappdir)|Binary|
+|.bmp|Bitmap|.hpppl|
+|.png|Portable Network Graphic|.hpppl|
+|.h|Adafruit GFX Font (.hpppl)|.hpppl|
+|.hpprgm|Standalone program binary|.hpppl|
+|.hpappprgm|App program binary (inside .hpappdir)|.hpppl|
+|.hpnote|Standalone note binary|.ntf|
+|.hpappnote|App note binary (inside .hpappdir)|.ntf|
 |.prgm|HP PPL source code|UTF16le|
 |.hpppl|HP PPL source code|UTF8|
 |.hppplplus|HP PPL Plus extended program source code|UTF8|
