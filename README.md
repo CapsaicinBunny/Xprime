@@ -28,22 +28,23 @@ Hold down the **Option (⌥) key**, then **click and hold** on the About window 
 ### Supported File Types
 |Type|Description|Format|
 |:-|:-|:-|
-|.ntf|NoteText format|UTF8|
+|.xprimeproj|Xprime project|JSON|
+|.ntf|NoteText|UTF8|
 |.md|Markdown Language|UTF8|
-|.bmp|Bitmap|Image|
-|.png|Portable Network Graphic|Image|
-|.h|Adafruit GFX Font|UTF8|
-|.hpnote|HP Prime note|Binary|
-|.hpappnote|HP Prime note|Binary|
-|.hpprgm|HP Prime program (exported/packaged)|Binary|
-|.hpappprgm|HP Prime application (exported/packaged)|Binary|
-|.prgm|HP Prime program source code|UTF16le|
-|.hpppl|HP Prime Programming Language source file|UTF8|
-|.hppplplus|HP Prime PPL+ extended program source code|UTF8|
-|.ppl|HP Prime Programming Language source file|UTF8|
-|.ppl+|HP Prime PPL+ extended program source code|UTF8|
+|.bmp|Bitmap|.hpppl|
+|.png|Portable Network Graphic|.hpppl|
+|.h|Adafruit GFX Font (.hpppl)|.hpppl|
+|.hpprgm|Standalone program binary|.hpppl|
+|.hpappprgm|App program binary (inside .hpappdir)|.hpppl|
+|.hpnote|Standalone note binary|.ntf|
+|.hpappnote|App note binary (inside .hpappdir)|.ntf|
+|.prgm|HP PPL source code|UTF16le|
+|.hpppl|HP PPL source code|UTF8|
+|.hppplplus|HP PPL Plus extended program source code|UTF8|
+|.ppl|HP PPL source code|UTF8|
+|.ppl+|HP PPL Plus source code|UTF8|
 
->In light of [HP Prime Development Tools](https://marketplace.visualstudio.com/ite...de-hpprime)￼ support, Xprime will adopt the .hpppl and .hppplplus file types and discontinue .prgm+. This change will simplify development for those using either Visual Studio Code or Xprime.
+>In light of [HP Prime Development Tools](https://marketplace.visualstudio.com/items?itemName=AndreaBaccin.vscode-hpprime)￼ support, Xprime will adopt the .hpppl and .hppplplus file types and discontinue .prgm+. This change will simplify development for those using either Visual Studio Code or Xprime.
 
 Typical File Structure for an HP Prime **Application**
 ```
