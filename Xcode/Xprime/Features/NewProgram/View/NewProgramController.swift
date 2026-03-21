@@ -56,7 +56,7 @@ final class NewProgramViewController: NSViewController, NSTextFieldDelegate, NSC
         panel.canChooseDirectories = true
         panel.allowsMultipleSelection = false
         panel.canCreateDirectories = true
-        panel.directoryURL = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+        panel.directoryURL = URL(fileURLWithPath: Settings.shared.location)
         panel.prompt = "Create"
         panel.level = .modalPanel
 

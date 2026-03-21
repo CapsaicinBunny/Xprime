@@ -10,7 +10,7 @@ Sq    := 26,     Neg   := 27,     N     := 28,     Comma := 29,                 
 Eex   := 31,     7     := 32,     8     := 33,     9     := 34,                  Div   := 35,\
 Alpha := 36,     4     := 37,     5     := 38,     6     := 39,                  Mult  := 40,\
 Shift := 41,     1     := 42,     2     := 43,     3     := 44,                  Minus := 45,\
-On    := 46,     0     := 47,     Dot   := 48,     Space := 49,                  Plus  := 50\
+On    := 46,     0     := 47,     Dot   := 48,     Space := 49,                  Plus  := 50 \
 KeyCode;
 regex `\bK<([a-z]\w*)>`i KeyCode.$1
 LOCAL state;
