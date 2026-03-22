@@ -1,8 +1,8 @@
 .DS_Store
 *.xcworkspace/xcuserdata/
 xcuserdata/
-_installer
-Xcode/Tools/note/_installer
+installer
+Xcode/Tools/note/installer
 rtf_output
 build
 make
