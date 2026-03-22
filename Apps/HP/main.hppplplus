@@ -21,10 +21,10 @@
 /// SOFTWARE.
 #pragma mode( separator(.,;) integer(h64) indentation(2) )
 
-{$I "HP.ppl"}
-{$I "Font8.h"}
-{$I "Font10.h"}
-{$I "Sans24.h"}
-{$I "TEXT.ppl"}
-{$I "GROB.ppl"}
-{$I "ColorSpace.ppl"}
+{$I "HP.hpppl"}
+Font8 := {$I "Font8.h"};
+Font10 := {$I "Font10.h"};
+Sans24 := {$I "Sans24.h"};
+{$I "TEXT.hpppl"}
+{$I "GROB.hpppl"}
+{$I "ColorSpace.hpppl"}
